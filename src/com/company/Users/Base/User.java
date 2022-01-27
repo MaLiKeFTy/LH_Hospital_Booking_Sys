@@ -1,8 +1,6 @@
 package com.company.Users.Base;
 
-import com.company.Users.UserInfo.UserAddress;
-import com.company.Users.UserInfo.UserGender;
-import com.company.Users.UserInfo.UserName;
+import com.company.Users.UserInfo.*;
 
 public abstract class User {
 

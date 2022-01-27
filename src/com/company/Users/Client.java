@@ -3,9 +3,7 @@ package com.company.Users;
 import com.company.ITreatmentCourseAssigner;
 import com.company.TreatmentCourse;
 import com.company.Users.Base.User;
-import com.company.Users.UserInfo.UserAddress;
-import com.company.Users.UserInfo.UserGender;
-import com.company.Users.UserInfo.UserName;
+import com.company.Users.UserInfo.*;
 
 import java.util.List;
 
