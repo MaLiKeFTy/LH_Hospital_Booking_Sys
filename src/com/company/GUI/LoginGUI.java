@@ -1,10 +1,12 @@
 package com.company.GUI;
 
+import com.company.DataBaseConnector;
 import com.company.GUI.Base.GuiBase;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 public class LoginGUI extends GuiBase {
 
@@ -15,8 +17,8 @@ public class LoginGUI extends GuiBase {
 
     JPanel authenticationPanel = new JPanel();
 
-    JLabel usernameLabel = new JLabel("User Name");
-    JTextField usernameTextField = new JTextField();
+    JLabel emailLabel = new JLabel("Email");
+    JTextField emailTextField = new JTextField();
     JLabel passwordLabel = new JLabel("Password");
     JPasswordField passwordTextField = new JPasswordField();
 
@@ -42,11 +44,11 @@ public class LoginGUI extends GuiBase {
         authenticationPanel.setBounds(100, 300, 600, 200);
         authenticationPanel.setBackground(Color.BLUE);
 
-        usernameLabel.setForeground(Color.WHITE);
-        authenticationPanel.add(usernameLabel);
+        emailLabel.setForeground(Color.WHITE);
+        authenticationPanel.add(emailLabel);
 
-        usernameTextField.setBounds(100,20,165,25);
-        authenticationPanel.add(usernameTextField);
+        emailTextField.setBounds(100,20,165,25);
+        authenticationPanel.add(emailTextField);
 
         passwordLabel.setForeground(Color.WHITE);
         authenticationPanel.add(passwordLabel);
@@ -79,10 +81,21 @@ public class LoginGUI extends GuiBase {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == goBackButton){
+            GetMainFrame().getContentPane().removeAll();
 
-        GetMainFrame().getContentPane().removeAll();
+            MainMenuGUI mainMenuGUI = new MainMenuGUI();
+            mainMenuGUI.DisplayGUI();
+        }else{
+            DataBaseConnector dataBaseConnector = new DataBaseConnector();
+            try {
+                String loginResult = dataBaseConnector.LoginMessage(emailTextField.getText(),passwordTextField.getText());
+                System.out.println(loginResult);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
 
-        MainMenuGUI mainMenuGUI = new MainMenuGUI();
-        mainMenuGUI.DisplayGUI();
+        }
+
     }
 }

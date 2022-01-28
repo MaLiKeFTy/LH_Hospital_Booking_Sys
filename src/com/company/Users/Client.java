@@ -11,8 +11,8 @@ public class Client extends User implements ITreatmentCourseAssigner {
 
     List<TreatmentCourse> _treatmentCourses;
 
-    public Client(UserName name, String emailAddress, String password, int age, UserAddress userAddress, UserGender userGender) {
-        super(name, emailAddress, password, age, userAddress, userGender);
+    public Client(UserName name, String emailAddress, String password, int age, UserGender userGender) {
+        super(name, emailAddress, password, age, userGender);
     }
 
     @Override
