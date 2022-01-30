@@ -1,7 +1,11 @@
 package com.company.GUI;
 
 import com.company.DataBaseConnector;
+import com.company.GUI.Alerts.AlertMessage;
 import com.company.GUI.Base.GuiBase;
+import com.company.GUI.ProfilesGUI.Base.ProfileGUI;
+import com.company.GUI.ProfilesGUI.Factory.ProfileGuiFactory;
+import com.company.Users.Base.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,36 +43,36 @@ public class LoginGUI extends GuiBase {
         menuTitleLabel.setFont(new Font("Serif", Font.BOLD, 30));
         menuTitlePanel.add(menuTitleLabel);
 
-        authenticationPanel.setLayout(new GridLayout(2,2,20,20));
-        authenticationPanel.setBorder(BorderFactory.createEmptyBorder(60,20,60,20));
+        authenticationPanel.setLayout(new GridLayout(2, 2, 20, 20));
+        authenticationPanel.setBorder(BorderFactory.createEmptyBorder(60, 20, 60, 20));
         authenticationPanel.setBounds(100, 300, 600, 200);
         authenticationPanel.setBackground(Color.BLUE);
 
         emailLabel.setForeground(Color.WHITE);
         authenticationPanel.add(emailLabel);
 
-        emailTextField.setBounds(100,20,165,25);
+        emailTextField.setBounds(100, 20, 165, 25);
         authenticationPanel.add(emailTextField);
 
         passwordLabel.setForeground(Color.WHITE);
         authenticationPanel.add(passwordLabel);
 
-        passwordTextField.setBounds(100,50,165,25);
+        passwordTextField.setBounds(100, 50, 165, 25);
         authenticationPanel.add(passwordTextField);
 
         menuButtonsPanel.setBounds(100, 500, 600, 100);
-        menuButtonsPanel.setBorder(BorderFactory.createEmptyBorder(30,20,30,20));
-        menuButtonsPanel.setLayout(new GridLayout(1,0,20,20));
+        menuButtonsPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
+        menuButtonsPanel.setLayout(new GridLayout(1, 0, 20, 20));
         menuButtonsPanel.setBackground(Color.BLUE);
 
         logInButton.addActionListener(this);
-        logInButton.setFont(new Font("Serif", Font.BOLD,30));
+        logInButton.setFont(new Font("Serif", Font.BOLD, 30));
         logInButton.setBackground(Color.WHITE);
         logInButton.setForeground(Color.BLUE);
         menuButtonsPanel.add(logInButton);
 
         goBackButton.addActionListener(this);
-        goBackButton.setFont(new Font("Serif", Font.BOLD,30));
+        goBackButton.setFont(new Font("Serif", Font.BOLD, 30));
         goBackButton.setBackground(Color.WHITE);
         goBackButton.setForeground(Color.BLUE);
         menuButtonsPanel.add(goBackButton);
@@ -81,18 +85,32 @@ public class LoginGUI extends GuiBase {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == goBackButton){
+        if (e.getSource() == goBackButton) {
             GetMainFrame().getContentPane().removeAll();
 
             MainMenuGUI mainMenuGUI = new MainMenuGUI();
             mainMenuGUI.DisplayGUI();
-        }else{
+        } else {
             DataBaseConnector dataBaseConnector = new DataBaseConnector();
+
+            User user = null;
+
             try {
-                String loginResult = dataBaseConnector.LoginMessage(emailTextField.getText(),passwordTextField.getText());
-                System.out.println(loginResult);
+                user = dataBaseConnector.LoginResult(emailTextField.getText(), passwordTextField.getText());
+
+
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            }
+
+            AlertMessage alertMessage = new AlertMessage();
+            if (user == null) {
+                alertMessage.DisplayAlert(new String[]{"ok"}, "Wrong email or password, please try again.");
+            }else{
+                GetMainFrame().getContentPane().removeAll();
+                ProfileGUI profileGUI = ProfileGuiFactory.GetProfileGUI(user.get_userType());
+                profileGUI.set_user(user);
+                profileGUI.DisplayGUI();
             }
 
         }

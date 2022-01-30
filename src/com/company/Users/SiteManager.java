@@ -9,4 +9,7 @@ public class SiteManager extends User {
     public SiteManager(UserName name, String emailAddress, String password, int age, UserGender userGender) {
         super(name, emailAddress, password, age, userGender);
     }
+
+    public SiteManager() {
+    }
 }

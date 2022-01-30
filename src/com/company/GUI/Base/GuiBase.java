@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 public abstract class GuiBase implements ActionListener {
 
-    static JFrame _mainFrame;
+    public static JFrame _mainFrame;
 
     protected JFrame GetMainFrame() {
 

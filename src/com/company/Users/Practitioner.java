@@ -15,6 +15,8 @@ public class Practitioner extends User {
         super(name, emailAddress, password, age, userGender);
     }
 
+    public Practitioner() {
+    }
 
     public void AssignToClient(Client client) {
         if (!_clients.contains(client))
@@ -22,7 +24,7 @@ public class Practitioner extends User {
     }
 
     public void UnAssignFromClient(Client client) {
-            _clients.remove(client);
+        _clients.remove(client);
     }
 
 }

@@ -1,9 +1,10 @@
 package com.company.GUI;
 
 import com.company.DataBaseConnector;
+import com.company.GUI.Alerts.AlertMessage;
 import com.company.GUI.Base.GuiBase;
-import com.company.Users.*;
 import com.company.Users.Base.User;
+import com.company.Users.*;
 import com.company.Users.UserInfo.UserGender;
 import com.company.Users.UserInfo.UserName;
 
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RegisterGUI extends GuiBase {
 
@@ -158,23 +160,27 @@ public class RegisterGUI extends GuiBase {
             mainMenuGUI.DisplayGUI();
         } else {
 
-            UserName userName = new UserName(firstNameTextField.getText(), lastNameTextField.getText());
+            AlertMessage alertMessage = new AlertMessage();
+            if (!DetailsAreFilled()) {
+                alertMessage.DisplayAlert(new String[]{"ok"}, "Please fill all details before registering.");
+                return;
+            }
 
-            String userEmail = emailTextField.getText();
+            if (!SamePassword()) {
+                alertMessage.DisplayAlert(new String[]{"ok"}, "Password and repeat password and not matching, please try again.");
+                return;
+            }
 
+
+            UserName userName = new UserName(firstNameTextField.getText().toLowerCase(Locale.ROOT), lastNameTextField.getText().toLowerCase(Locale.ROOT));
+            String userEmail = emailTextField.getText().toLowerCase(Locale.ROOT);
             String userPassword = passwordTextField.getText();
-
-
-
             String userAgeText = ageComboBox.getSelectedItem().toString();
             int userAge = Integer.parseInt(userAgeText);
-
             UserGender userGender = UserGender.values()[genderComboBox.getSelectedIndex()];
 
-
             User newUser = null;
-
-            switch (userTypeBox.getSelectedIndex()){
+            switch (userTypeBox.getSelectedIndex()) {
                 case 0:
                     newUser = new Client(userName,
                             userEmail,
@@ -218,11 +224,42 @@ public class RegisterGUI extends GuiBase {
 
             try {
                 dataBaseConnector.AddUserToTable(newUser);
+
+
+                int alertChoice = alertMessage.DisplayAlert(new String[]{"Log In", "Close"}, "You have successfully registered.");
+
+                if (alertChoice == 0) {
+                    GetMainFrame().getContentPane().removeAll();
+                    LoginGUI loginGUI = new LoginGUI();
+                    loginGUI.DisplayGUI();
+                }
+
+
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
 
         }
+    }
+
+
+    Boolean DetailsAreFilled() {
+
+        String[] inputs = {firstNameTextField.getText(), lastNameTextField.getText(), emailTextField.getText(), passwordTextField.getText()};
+
+        for (var input : inputs) {
+            if (input.equals(""))
+                return false;
+        }
+
+        return true;
+    }
+
+    Boolean SamePassword() {
+        if (passwordTextField.getText().equals(repeatPasswordTextField.getText())) {
+            return true;
+        }
+        return false;
     }
 
 

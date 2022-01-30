@@ -16,6 +16,10 @@ public class Surgeon extends User implements ITreatmentCourseAssigner {
         super(name, emailAddress, password, age, userGender);
     }
 
+    public Surgeon(){
+
+    }
+
     @Override
     public void AssignToTreatmentCourse(TreatmentCourse treatmentCourse) {
         if (!_treatmentCourses.contains(treatmentCourse))
