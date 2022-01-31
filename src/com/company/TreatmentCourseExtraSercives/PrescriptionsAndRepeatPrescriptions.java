@@ -6,8 +6,8 @@ import java.util.Currency;
 
 public class PrescriptionsAndRepeatPrescriptions extends TreatmentCourseExtraService {
 
-    public PrescriptionsAndRepeatPrescriptions(Currency totalCost) {
-        super(totalCost);
+    public PrescriptionsAndRepeatPrescriptions() {
+
     }
 
 }

@@ -62,7 +62,7 @@ public class DataBaseConnector {
 
         preparedStatement.executeUpdate();
 
-        connection.close();
+        //connection.close();
     }
 
 
@@ -97,7 +97,7 @@ public class DataBaseConnector {
                 return user;
         }
 
-        connection.close();
+        // connection.close();
         return null;
     }
 
@@ -137,7 +137,7 @@ public class DataBaseConnector {
             tempUsers.add(user);
         }
 
-        connection.close();
+        //connection.close();
 
         return tempUsers.toArray(new User[0]);
 
@@ -165,7 +165,54 @@ public class DataBaseConnector {
         preparedStatement.setString(6, practitionerLastName);
 
         preparedStatement.executeUpdate();
+        //connection.close();
 
+    }
+
+
+    public void AssignClientToTreatment(TreatmentCourse treatmentCourse, Client client, Practitioner practitioner) throws SQLException {
+
+        int treatmentCourseId = treatmentCourse.get_id();
+        String treatmentCourseName = treatmentCourse.get_name();
+        String treatmentCourseStatus = treatmentCourse.get_status().toString();
+
+        int clientId = client.get_id();
+        String clientFirstName = client.get_name().get_firstName();
+        String clientLastName = client.get_name().get_lastName();
+
+        int practitionerId = practitioner.get_id();
+        String practitionerFirstName = practitioner.get_name().get_firstName();
+        String practitionerLastName = practitioner.get_name().get_lastName();
+
+        String sql = "INSERT INTO treatment_course(" +
+                "treatment_id," +
+                "treatment_name," +
+                "treatment_status," +
+                "practitioner_id," +
+                "practitioner_firstname," +
+                "practitioner_lastname," +
+                "client_id," +
+                "client_firstname," +
+                "client_lastname) " +
+                "Values (?,?,?,?,?,?,?,?,?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        preparedStatement.setInt(1, treatmentCourseId);
+        preparedStatement.setString(2, treatmentCourseName);
+        preparedStatement.setString(3, treatmentCourseStatus);
+
+
+        preparedStatement.setInt(4, practitionerId);
+        preparedStatement.setString(5, practitionerFirstName);
+        preparedStatement.setString(6, practitionerLastName);
+
+        preparedStatement.setInt(7, clientId);
+        preparedStatement.setString(8, clientFirstName);
+        preparedStatement.setString(9, clientLastName);
+
+        preparedStatement.executeUpdate();
+        // connection.close();
     }
 
 
@@ -195,11 +242,79 @@ public class DataBaseConnector {
             tempUsers.add(user);
         }
 
-        connection.close();
+        //connection.close();
 
         return tempUsers.toArray(new Practitioner[0]);
 
 
     }
+
+
+    public String[] PractitionerTreatmentNames(Practitioner practitioner) throws SQLException {
+
+        List<String> tempTreatmentNames = new ArrayList<>();
+
+        resultSet = statement.executeQuery("select * from treatment_course");
+
+        while (resultSet.next()) {
+
+            if (resultSet.getInt("practitioner_id") == practitioner.get_id()) {
+                tempTreatmentNames.add(resultSet.getString("treatment_name"));
+            }
+        }
+
+        return tempTreatmentNames.toArray(new String[0]);
+    }
+
+    public String[] ClientTreatmentNames(Client client) throws SQLException {
+
+        List<String> tempTreatmentNames = new ArrayList<>();
+
+        resultSet = statement.executeQuery("select * from treatment_course");
+
+        while (resultSet.next()) {
+
+            if (resultSet.getInt("client_id") == client.get_id()) {
+                tempTreatmentNames.add(resultSet.getString("treatment_name"));
+            }
+        }
+
+        return tempTreatmentNames.toArray(new String[0]);
+    }
+
+
+    public Client[] GetPractitionerClients(Practitioner practitioner) throws SQLException {
+
+
+        List<Client> tempClients = new ArrayList<>();
+
+        resultSet = statement.executeQuery("select * from clients_practitioners");
+
+        while (resultSet.next()) {
+
+            if (resultSet.getInt("practitioner_id") != practitioner.get_id())
+                continue;
+
+            Client client = new Client();
+
+            int userIdDB = resultSet.getInt("client_id");
+            String firstNameDB = resultSet.getString("client_firstname");
+            String lastNameDB = resultSet.getString("client_lastname");
+
+
+            client.set_id(userIdDB);
+            client.set_name(new UserName(firstNameDB, lastNameDB));
+
+
+            tempClients.add(client);
+        }
+
+        //connection.close();
+
+        return tempClients.toArray(new Client[0]);
+
+
+    }
+
 
 }

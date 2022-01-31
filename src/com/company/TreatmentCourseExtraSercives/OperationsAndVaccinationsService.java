@@ -5,7 +5,7 @@ import com.company.TreatmentCourseExtraSercives.Base.TreatmentCourseExtraService
 import java.util.Currency;
 
 public class OperationsAndVaccinationsService extends TreatmentCourseExtraService {
-    public OperationsAndVaccinationsService(Currency totalCost) {
-        super(totalCost);
+    public OperationsAndVaccinationsService() {
+
     }
 }

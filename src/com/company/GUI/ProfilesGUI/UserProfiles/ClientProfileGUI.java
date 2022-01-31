@@ -33,7 +33,7 @@ public class ClientProfileGUI extends UserProfileGUI {
     JPanel treatmentsListPanel = new JPanel();
 
 
-    JList treatmentCourseListContainer = new JList();
+    JList<String> treatmentCourseListContainer = new JList<>();
     JScrollPane treatmentCourseListScroll = new JScrollPane(treatmentCourseListContainer);
 
 
@@ -45,16 +45,20 @@ public class ClientProfileGUI extends UserProfileGUI {
     JPanel treatmentsButtonPanel = new JPanel();
     JLabel addTreatmentCourseButton = new JLabel();
 
-    Client _client = (Client) get_user();
+    Client _client;
+
 
     Practitioner _selectedPractitioner;
 
     Practitioner[] _clientPractitioners;
 
+    DataBaseConnector dataBaseConnector = new DataBaseConnector();
+
     @Override
     public void DisplayGUI() {
         super.DisplayGUI();
 
+        _client = (Client) get_user();
 
         practitionersTitlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         practitionersTitlePanel.setBounds(100, 260, 295, 100);
@@ -84,6 +88,9 @@ public class ClientProfileGUI extends UserProfileGUI {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+
 
         treatmentsTitlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         treatmentsTitlePanel.setBounds(405, 260, 295, 100);
@@ -159,12 +166,17 @@ public class ClientProfileGUI extends UserProfileGUI {
     }
 
 
+    void DisplayMyTreatments() throws SQLException {
+
+        System.out.println(dataBaseConnector.ClientTreatmentNames(_client).length);
+        treatmentCourseListContainer.setListData(dataBaseConnector.ClientTreatmentNames(_client));
+    }
+
+
     void DisplayMyPractitioners() throws SQLException {
         practitionersTitle.setText("My Practitioners:");
 
         _client = (Client) get_user();
-
-        DataBaseConnector dataBaseConnector = new DataBaseConnector();
 
         Practitioner[] practitioners = dataBaseConnector.GetClientPractitioners(_client);
 
@@ -180,19 +192,17 @@ public class ClientProfileGUI extends UserProfileGUI {
 
         practitionersButtonPanel.remove(goBackPractitionerButton);
         practitionersButtonPanel.remove(addPractitioner1Button);
+
+        DisplayMyTreatments();
     }
 
     void DisplayAvailablePractitioners() throws SQLException {
 
         practitionersTitle.setText("Available Practitioners:");
 
-        DataBaseConnector dataBaseConnector = new DataBaseConnector();
-
         User[] practitioners = dataBaseConnector.GetAllUsers("Practitioner");
 
-
         List<Practitioner> tempPractitioners = new ArrayList<>();
-
 
         if (_clientPractitioners.length >= 1) {
             for (User practitionerDB : practitioners) {
