@@ -27,12 +27,10 @@ public final class ProfileGuiFactory {
 
     static ProfileGUI[] profilesGUI() {
 
-        ProfileGUI[] profileGUIS = {
+        return new ProfileGUI[]{
                 new ClientProfileGUI(),
                 new PractitionerProfileGUI(),
         };
-
-        return profileGUIS;
     }
 
 

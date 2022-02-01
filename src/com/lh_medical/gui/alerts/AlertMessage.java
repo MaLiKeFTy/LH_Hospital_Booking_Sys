@@ -4,9 +4,14 @@ import javax.swing.*;
 
 public class AlertMessage {
 
+
+    /**
+     * Display gui message to the user.
+     */
+
     public int displayAlert(String[] options, String message) {
 
-        int response = JOptionPane.showOptionDialog(
+        return JOptionPane.showOptionDialog(
                 null,
                 message,
                 "Alert",
@@ -15,7 +20,5 @@ public class AlertMessage {
                 null,
                 options,
                 0);
-
-        return response;
     }
 }

@@ -2,7 +2,7 @@ package com.lh_medical.gui.profiles_gui.user_profiles;
 
 import com.lh_medical.db.DataBaseManager;
 import com.lh_medical.gui.alerts.AlertMessage;
-import com.lh_medical.gui.profiles_gui.user_profiles.base.UserProfileGUI;
+import com.lh_medical.gui.profiles_gui.base.ProfileGUI;
 import com.lh_medical.treatment_course.TreatmentCourse;
 import com.lh_medical.users.Client;
 import com.lh_medical.users.Practitioner;
@@ -13,9 +13,10 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
-public class PractitionerProfileGUI extends UserProfileGUI {
+public class PractitionerProfileGUI extends ProfileGUI {
 
     JPanel clientsTitlePanel = new JPanel();
     JLabel clientTitle = new JLabel("My Clients:");
@@ -32,7 +33,7 @@ public class PractitionerProfileGUI extends UserProfileGUI {
     JPanel treatmentsListPanel = new JPanel();
 
 
-    JList<String> treatmentCourseListContainer = new JList<String>();
+    JList<String> treatmentCourseListContainer = new JList<>();
     JScrollPane treatmentCourseListScroll = new JScrollPane(treatmentCourseListContainer);
 
     JButton goBackTreatmentButton = new JButton("Go Back");
@@ -115,7 +116,7 @@ public class PractitionerProfileGUI extends UserProfileGUI {
             } else {
                 TreatmentCourse treatmentCourse = new TreatmentCourse(treatmentNameField.getText());
                 try {
-                    addTreatmentToDB(treatmentCourse, selectedClient(clientTreatmentAssignBox.getSelectedItem().toString()));
+                    addTreatmentToDB(treatmentCourse, selectedClient(Objects.requireNonNull(clientTreatmentAssignBox.getSelectedItem()).toString()));
                     alertMessage.displayAlert(new String[]{"ok"}, "Treatment has been added successfully.");
                 } catch (SQLException ex) {
                     ex.printStackTrace();

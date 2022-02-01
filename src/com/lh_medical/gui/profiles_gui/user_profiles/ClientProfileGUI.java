@@ -2,21 +2,19 @@ package com.lh_medical.gui.profiles_gui.user_profiles;
 
 import com.lh_medical.db.DataBaseManager;
 import com.lh_medical.gui.alerts.AlertMessage;
-import com.lh_medical.gui.profiles_gui.user_profiles.base.UserProfileGUI;
-import com.lh_medical.users.base.User;
+import com.lh_medical.gui.profiles_gui.base.ProfileGUI;
 import com.lh_medical.users.Client;
 import com.lh_medical.users.Practitioner;
+import com.lh_medical.users.base.User;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientProfileGUI extends UserProfileGUI {
+public class ClientProfileGUI extends ProfileGUI {
 
     JPanel practitionersTitlePanel = new JPanel();
     JLabel practitionersTitle = new JLabel("My Practitioners:");
@@ -88,8 +86,6 @@ public class ClientProfileGUI extends UserProfileGUI {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
 
 
         treatmentsTitlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -233,16 +229,13 @@ public class ClientProfileGUI extends UserProfileGUI {
 
         practitionersButtonPanel.add(goBackPractitionerButton);
 
-        practitionersListContainer.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
+        practitionersListContainer.addListSelectionListener(e -> {
 
-                getSelectedAvailablePractitioner(practitioners);
-                practitionersButtonPanel.remove(goBackPractitionerButton);
-                practitionersButtonPanel.add(addPractitioner1Button);
-                practitionersButtonPanel.add(goBackPractitionerButton);
-                getMainFrame();
-            }
+            getSelectedAvailablePractitioner(practitioners);
+            practitionersButtonPanel.remove(goBackPractitionerButton);
+            practitionersButtonPanel.add(addPractitioner1Button);
+            practitionersButtonPanel.add(goBackPractitionerButton);
+            getMainFrame();
         });
 
 
@@ -252,8 +245,8 @@ public class ClientProfileGUI extends UserProfileGUI {
 
     void getSelectedAvailablePractitioner(User[] practitioners) {
         for (User practitioner : practitioners) {
-            if(practitionersListContainer.getSelectedValue() != null){
-                if ((practitioner.get_name().getFirstName() + " " + practitioner.get_name().getLastName()).equals(practitionersListContainer.getSelectedValue().toString())) {
+            if (practitionersListContainer.getSelectedValue() != null) {
+                if ((practitioner.get_name().getFirstName() + " " + practitioner.get_name().getLastName()).equals(practitionersListContainer.getSelectedValue())) {
                     selectedPractitioner = (Practitioner) practitioner;
                     return;
                 }

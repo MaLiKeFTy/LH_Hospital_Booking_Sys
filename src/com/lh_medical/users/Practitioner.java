@@ -11,9 +11,7 @@ import java.util.List;
 
 public class Practitioner extends User implements ITreatmentCourseAssigner {
 
-    List<Client> clients = new ArrayList<>();
     List<TreatmentCourse> treatmentCourses = new ArrayList<>();
-
 
     public Practitioner(UserName name, String emailAddress, String password, int age, UserGender userGender) {
         super(name, emailAddress, password, age, userGender);

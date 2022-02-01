@@ -111,6 +111,8 @@ public class LoginGUI extends GuiBase {
             } else {
                 getMainFrame().getContentPane().removeAll();
                 ProfileGUI profileGUI = ProfileGuiFactory.getProfileGUI(user.get_userType());
+
+                assert profileGUI != null;
                 profileGUI.setUser(user);
                 profileGUI.displayGUI();
             }

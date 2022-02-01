@@ -27,12 +27,10 @@ public final class UserFactory {
 
     static User[] users() {
 
-        User[] users = {
+        return new User[]{
                 new Client(),
                 new Practitioner(),
         };
-
-        return users;
     }
 
 
